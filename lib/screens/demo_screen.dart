@@ -28,15 +28,27 @@ class _DemoScreenState extends State<DemoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        title: const Text('AR Demonstration'),
-      ),
-      body: UnityWidget(
-        onUnityCreated: _onUnityCreated,
-        onUnityMessage: onUnityMessage,
-      ),
-    );
+        key: _scaffoldKey,
+        appBar: AppBar(
+          title: const Text('AR Demonstration'),
+        ),
+        body: Stack(
+          children: <Widget>[
+            UnityWidget(
+              onUnityCreated: _onUnityCreated,
+              onUnityMessage: onUnityMessage,
+            ),
+            Positioned.fill(
+                child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: IconButton(
+                      onPressed: placeObject,
+                      icon: const Icon(Icons.add),
+                      color: Colors.white,
+                      iconSize: 40,
+                    )))
+          ],
+        ));
   }
 
   void onUnityMessage(message) {
@@ -46,5 +58,10 @@ class _DemoScreenState extends State<DemoScreen> {
   // Callback that connects the created controller to the unity controller
   void _onUnityCreated(controller) {
     _unityWidgetController = controller;
+    // _unityWidgetController.postMessage(gameObject, methodName, message)
+  }
+
+  void placeObject() {
+    _unityWidgetController.postMessage("Interaction", "PlaceObject", "");
   }
 }
