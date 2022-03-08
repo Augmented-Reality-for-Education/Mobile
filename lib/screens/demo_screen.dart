@@ -41,12 +41,16 @@ class _DemoScreenState extends State<DemoScreen> {
             Positioned.fill(
                 child: Align(
                     alignment: Alignment.bottomCenter,
-                    child: IconButton(
-                      onPressed: placeObject,
-                      icon: const Icon(Icons.add),
-                      color: Colors.white,
-                      iconSize: 40,
-                    )))
+                    child: Row(children: <Widget>[
+                      ElevatedButton(
+                        onPressed: () => placeObject(mariusUrl),
+                        child: const Text('Place Marius'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => placeObject(oveUrl),
+                        child: const Text('Place Ove'),
+                      )
+                    ])))
           ],
         ));
   }
@@ -61,7 +65,13 @@ class _DemoScreenState extends State<DemoScreen> {
     // _unityWidgetController.postMessage(gameObject, methodName, message)
   }
 
-  void placeObject() {
-    _unityWidgetController.postMessage("Interaction", "PlaceObject", "");
+  static const String mariusUrl =
+      'https://ca.slack-edge.com/T0JL2AS8Y-U013PJA4BU6-4efbd2c46d72-512';
+
+  static const String oveUrl =
+      'https://ca.slack-edge.com/T0JL2AS8Y-U02B96G9EF2-16219205fe96-512';
+
+  void placeObject(String imageUrl) {
+    _unityWidgetController.postMessage("Interaction", "PlaceImageFromUrl", imageUrl);
   }
 }
