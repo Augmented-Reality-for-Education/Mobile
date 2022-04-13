@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_unity/classes/ar_image.dart';
+import 'package:ar_for_education/classes/ar_image.dart';
 import 'package:http/http.dart' as http;
 
 class MenuScreen extends StatefulWidget {

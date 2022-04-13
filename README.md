@@ -1,4 +1,4 @@
-# flutter_unity
+# ar_for_education
 
 A new Flutter project.
 

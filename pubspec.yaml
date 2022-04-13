@@ -1,5 +1,5 @@
-name: flutter_unity
-description: A new Flutter project.
+name: ar_for_education
+description: AR application to interactively display data for educational purposes.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.

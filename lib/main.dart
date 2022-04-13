@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_unity/screens/ar_screen.dart';
+import 'package:ar_for_education/screens/ar_screen.dart';
 
 import 'screens/menu_screen.dart';
 
