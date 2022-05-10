@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ar_for_education/screens/ar_screen_sequence.dart';
 import 'package:flutter/material.dart';
 import 'package:ar_for_education/screens/ar_screen.dart';
 
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MenuScreen(),
         '/ar': (context) => const ArScreen(),
+        '/ar-sequence': (context) => const ArScreenSequence()
       },
     );
   }

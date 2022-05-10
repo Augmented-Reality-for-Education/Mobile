@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ar_for_education/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:ar_for_education/classes/ar_image.dart';
 import 'package:flutter_unity_widget/flutter_unity_widget.dart';
@@ -74,24 +75,18 @@ class _ArScreenState extends State<ArScreen> {
     _unityWidgetController = controller;
   }
 
-  void placeObject(String imageUrl) {
-    _unityWidgetController.postMessage(
-        "Interaction", "PlaceImageFromUrl", imageUrl);
-  }
-
   void placeObjectFromDataUrl(String dataUrl) {
     _unityWidgetController.postMessage(
         "Interaction", "PlaceImageFromDataUrl", dataUrl);
   }
 
   Future<ArImage> fetchImageFromId(int id) async {
-    final response = await http.get(
-        Uri.parse('https://ar-for-education-api.azurewebsites.net/Image/$id'));
+    final response = await http.get(Uri.parse(api_url + 'Image/$id'));
 
     if (response.statusCode == 200) {
       return ArImage.fromJson(jsonDecode(response.body));
     }
 
-    throw Exception('Failed to load images to display in menu');
+    throw Exception('Failed to load image');
   }
 }
