@@ -23,6 +23,7 @@ class _ArScreenSequenceState extends State<ArScreenSequence> {
   late int _currentImageIndex = 0;
   late bool _ready = false;
   ArSequence? _sequence;
+  bool _vertical = true;
 
   @override
   void initState() {
@@ -31,8 +32,8 @@ class _ArScreenSequenceState extends State<ArScreenSequence> {
 
   @override
   void dispose() {
-    super.dispose();
     _unityWidgetController.dispose();
+    super.dispose();
   }
 
   @override
@@ -56,13 +57,14 @@ class _ArScreenSequenceState extends State<ArScreenSequence> {
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: const Text('AR Demonstration'),
+          title: Text(_sequence?.name ?? 'AR Demonstration'),
         ),
         body: Stack(
           children: <Widget>[
             UnityWidget(
               onUnityCreated: _onUnityCreated,
               onUnityMessage: onUnityMessage,
+              fullscreen: false,
             ),
             Align(
                 alignment: Alignment.bottomCenter,
@@ -89,14 +91,29 @@ class _ArScreenSequenceState extends State<ArScreenSequence> {
                                 updateSequenceTexture();
                               },
                             ),
-                            ElevatedButton(
-                                onPressed: () => {
-                                      if (_currentImage.dataUrl != null)
-                                        {
-                                          placeObject(),
-                                        }
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                ElevatedButton(
+                                    onPressed: () {
+                                      if (_currentImage.dataUrl != null) {
+                                        placeObject();
+                                      }
                                     },
-                                child: const Text('Place')),
+                                    child: const Text('Place')),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _vertical = !_vertical;
+                                      });
+                                      setVertically();
+                                    },
+                                    child: Text('Switch to ' +
+                                        (_vertical
+                                            ? 'Horizontal'
+                                            : 'Vertical'))),
+                              ],
+                            ),
                           ]
                         : [const CircularProgressIndicator()]))
           ],
@@ -109,6 +126,7 @@ class _ArScreenSequenceState extends State<ArScreenSequence> {
 
   // Callback that connects the created controller to the unity controller
   void _onUnityCreated(controller) {
+    controller.resume();
     _unityWidgetController = controller;
   }
 
@@ -120,6 +138,11 @@ class _ArScreenSequenceState extends State<ArScreenSequence> {
   void updateSequenceTexture() {
     _unityWidgetController.postMessage(
         "Interaction", "UpdateTexture", _currentImage.dataUrl);
+  }
+
+  void setVertically() {
+    _unityWidgetController.postMessage(
+        "Interaction", "SetVertically", _vertical ? 'Vertical' : 'Horizontal');
   }
 
   Future<ArSequence> fetchSequenceFromId(int? id) async {

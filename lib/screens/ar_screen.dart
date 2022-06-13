@@ -33,6 +33,7 @@ class _ArScreenState extends State<ArScreen> {
   @override
   Widget build(BuildContext context) {
     var image = ModalRoute.of(context)!.settings.arguments as ArImage;
+    var vertical = true;
 
     if (image.dataUrl == null) {
       fetchImageFromId(image.id).then((value) => image = value);
@@ -41,7 +42,7 @@ class _ArScreenState extends State<ArScreen> {
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: const Text('AR Demonstration'),
+          title: Text(image.name ?? 'AR Demonstration'),
         ),
         body: Stack(
           children: <Widget>[
@@ -49,19 +50,32 @@ class _ArScreenState extends State<ArScreen> {
               onUnityCreated: _onUnityCreated,
               onUnityMessage: onUnityMessage,
             ),
-            Positioned.fill(
-                child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Row(children: <Widget>[
-                      ElevatedButton(
-                          onPressed: () => {
-                                if (image.dataUrl != null)
-                                  {
-                                    placeObjectFromDataUrl(image.dataUrl!),
-                                  }
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton(
+                              onPressed: () {
+                                if (image.dataUrl != null) {
+                                  placeObjectFromDataUrl(image.dataUrl!);
+                                }
                               },
-                          child: const Text('Place'))
-                    ])))
+                              child: const Text('Place')),
+                          ElevatedButton(
+                              onPressed: () {
+                                vertical = !vertical;
+                                setVertically(vertical);
+                              },
+                              child: Text('Switch to ' +
+                                  (vertical ? 'Horizontal' : 'Vertical'))),
+                        ],
+                      ),
+                    ]))
           ],
         ));
   }
@@ -78,6 +92,11 @@ class _ArScreenState extends State<ArScreen> {
   void placeObjectFromDataUrl(String dataUrl) {
     _unityWidgetController.postMessage(
         "Interaction", "PlaceImageFromDataUrl", dataUrl);
+  }
+
+  void setVertically(bool vertical) {
+    _unityWidgetController.postMessage(
+        "Interaction", "SetVertically", vertical ? 'Vertical' : 'Horizontal');
   }
 
   Future<ArImage> fetchImageFromId(int id) async {
